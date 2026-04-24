@@ -2,10 +2,13 @@ import express from 'express';
 import userRouter from './routes/user.router.js';
 import errorHandler from './middleware/errorHandler.js';
 import dotenv from 'dotenv';
+import DBConnection from './config/DBConnect.Config.js';
 
 dotenv.config();
 
 const port = process.env.PORT || 5000;
+
+DBConnection();
 
 const app = express();
 
