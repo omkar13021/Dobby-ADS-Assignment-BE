@@ -1,6 +1,7 @@
 import express from 'express';
 import { checkSchema, validationResult } from 'express-validator';
-import { register, login, logout } from '../controller/authController.js';
+import { register, login, refresh, logout, getMe } from '../controller/authController.js';
+import { authenticate } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -46,6 +47,8 @@ router.post('/login', checkSchema({
     next();
 }, login);
 
+router.post('/refresh', refresh);
 router.post('/logout', logout);
+router.get('/me', authenticate, getMe);
 
 export default router;

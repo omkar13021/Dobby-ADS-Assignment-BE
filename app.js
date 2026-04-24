@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.router.js';
 import errorHandler from './middleware/errorHandler.js';
 import dotenv from 'dotenv';
@@ -17,8 +18,12 @@ await DBConnection();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api/auth', authRouter);

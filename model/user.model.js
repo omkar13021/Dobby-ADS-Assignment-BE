@@ -13,7 +13,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    refreshToken: {
+        type: String,
+        default: null
     }
-});
+}, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
