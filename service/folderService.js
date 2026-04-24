@@ -2,6 +2,17 @@ import Folder from '../model/folder.model.js';
 import Image from '../model/image.model.js';
 
 export const createFolder = async (name, parentId, userId) => {
+    // Validate parentId if provided
+    if (parentId) {
+        const parentFolder = await Folder.findById(parentId);
+        if (!parentFolder) {
+            throw new Error('Parent folder not found');
+        }
+        if (parentFolder.userId.toString() !== userId.toString()) {
+            throw new Error('Parent folder does not belong to this user');
+        }
+    }
+
     const folder = new Folder({
         name,
         parentId: parentId || null,
@@ -12,32 +23,24 @@ export const createFolder = async (name, parentId, userId) => {
 
 export const getFolderTree = async (userId) => {
     const folders = await Folder.find({ userId }).lean();
-    return buildTree(folders);
+    return folders;
 };
 
-const buildTree = (folders) => {
-    const map = {};
-    const roots = [];
+export const getFolderContents = async (userId, parentId = null) => {
+    const query = { userId };
+    
+    if (parentId) {
+        query.parentId = parentId;
+    } else {
+        query.parentId = null;
+    }
+    
+    const folders = await Folder.find(query).lean();
+    return folders;
+};
 
-    folders.forEach(folder => {
-        map[folder._id.toString()] = { ...folder, children: [] };
-    });
-
-    folders.forEach(folder => {
-        const node = map[folder._id.toString()];
-        if (folder.parentId) {
-            const parent = map[folder.parentId.toString()];
-            if (parent) {
-                parent.children.push(node);
-            } else {
-                roots.push(node);
-            }
-        } else {
-            roots.push(node);
-        }
-    });
-
-    return roots;
+export const getAllFolders = async (userId) => {
+    return await Folder.find({ userId }).lean();
 };
 
 export const renameFolder = async (folderId, name) => {

@@ -33,6 +33,11 @@ router.get('/', checkSchema({
         in: ['query'],
         notEmpty: { errorMessage: 'User ID is required' },
         isMongoId: { errorMessage: 'Invalid user ID' }
+    },
+    parentId: {
+        in: ['query'],
+        optional: { options: { nullable: true, checkFalsy: true } },
+        isMongoId: { errorMessage: 'Invalid parent folder ID' }
     }
 }), (req, res, next) => {
     const errors = validationResult(req);
