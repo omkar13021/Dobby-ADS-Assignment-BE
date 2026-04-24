@@ -1,9 +1,13 @@
 import express from 'express';
+import cors from 'cors';
+import path from 'path';
 import userRouter from './routes/user.router.js';
 import errorHandler from './middleware/errorHandler.js';
 import dotenv from 'dotenv';
 import DBConnection from './config/DBConnect.Config.js';
 import authRouter from './routes/auth.router.js';
+import folderRouter from './routes/folder.router.js';
+import imageRouter from './routes/image.router.js';
 
 dotenv.config();
 
@@ -13,11 +17,16 @@ await DBConnection();
 
 const app = express();
 
-app.use(express.json()); // json parser middleware provided by express
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
 app.use('/api/auth', authRouter);
+app.use('/api/folders', folderRouter);
+app.use('/api/images', imageRouter);
 app.use('/api/users', userRouter);
 
-app.use(errorHandler); // error handler middleware
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);

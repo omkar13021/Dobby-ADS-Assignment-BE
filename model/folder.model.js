@@ -10,21 +10,17 @@ const folderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    folderId: {
+    parentId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Folder',
-        required: false
+        default: null
     },
-    images: [{
-        imgName: {
-            type: String,
-            required: true
-        },
-        imgUrl: {
-            type: String,
-            required: true
-        }
-    }]
-});
+    size: {
+        type: Number,
+        default: 0
+    }
+}, { timestamps: true });
+
+folderSchema.index({ userId: 1, parentId: 1 });
 
 export default mongoose.model('Folder', folderSchema);
