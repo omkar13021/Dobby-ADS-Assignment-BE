@@ -1,15 +1,17 @@
 {
-  "name": "backend",
+  "name": "dobby-ads-full-stack-developer-assignment",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend for Dobby Ads Full Stack Developer Assignment",
   "license": "ISC",
-  "author": "",
+  "author": "Omkar",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "express": "^5.2.1"
   }
 }
